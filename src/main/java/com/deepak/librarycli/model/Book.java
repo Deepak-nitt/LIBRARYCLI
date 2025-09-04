@@ -67,4 +67,7 @@ public class Book {
     public String toString(){
         return String.format("[%s] %s by %s (%d) -%s",isbn,title,author,year,available ? "Available":"Not Available");
     }
+
+    public void put(String isbn, Book book) {
+    }
 }
