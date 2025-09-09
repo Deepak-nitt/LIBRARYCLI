@@ -46,4 +46,6 @@ public class Member {
     }
 
 
+    public void put(Email email, Member member) {
+    }
 }
