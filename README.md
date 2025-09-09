@@ -1,4 +1,8 @@
 # Library CLI Application
+![Java](https://img.shields.io/badge/Java-21-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Maven](https://img.shields.io/badge/Maven-3.6.3-orange)
+
 
 A command-line application to manage **Books**, **Members**, and **Loans** in a library. Built using **Java**, **Picocli CLI framework**, and follows **best practices** with layered architecture (Repository → Service → CLI).  
 
@@ -7,11 +11,20 @@ This application supports full in-memory management of books, members, and loan 
 
 
 ## Prerequisites
-
-- Java 17+
-- Maven
-- Git (optional)
-
+Before running the Library CLI application, make sure you have the following installed:
+1. Java 17 or above
+   - Check installation
+   ```bash
+   java -version
+   ```
+2. Maven (for building and running the project)
+   Install Maven on Ubuntu/Linux
+   ```bash
+   sudo apt update
+   sudo apt install maven -y
+   mvn -v
+   ```
+3. Git (for cloning and version control)
 
 ## Features
 
@@ -84,7 +97,7 @@ library-cli/
 1. Clone the repository:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Deepak-nitt/LIBRARYCLI.git
 cd library-cli
 ```
 2. Build the projects
@@ -213,3 +226,15 @@ loan issue --isbn 5678 --member M0002 --date 2025-09-10
 
 # Return a book
 loan return --isbn 5678 --member M0002 --date 2025-10-26
+```
+### **Contributing**
+```markdown
+## Contributing
+- Fork the repository
+- Create a new branch for each feature
+- Commit your changes
+- Open a Pull Request
+```
+## License
+This project is licensed under the MIT License.
+
