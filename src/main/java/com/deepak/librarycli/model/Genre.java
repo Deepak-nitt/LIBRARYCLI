@@ -8,4 +8,5 @@ public enum Genre {
         MYSTERY,
         HISTORY,
         BIOGRAPHY,
+        OTHER,
 }

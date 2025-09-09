@@ -1,10 +1,16 @@
 package com.deepak.librarycli.model;
 
-// Record for Email (immutable)
-public record Email(String value) {
-    public Email {
-        if (value == null || !value.contains("@")) {
-            throw new IllegalArgumentException("Invalid email: " + value);
-        }
+public class Email {
+    private String value;
+
+    public Email(String value) {
+        this.value = value;
     }
+
+    public String getValue() { return value; }
+    public void setValue(String value) { this.value = value; }
+
+    @Override
+    public String toString() { return value; }
 }
+

@@ -12,14 +12,19 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service for loan business logic.
  */
 public class LoanService {
+
     private final BookRepository bookRepo;
     private final MemberRepository memberRepo;
     private final LoanRepository loanRepo;
+
+    private static final int LOAN_PERIOD_DAYS = 14;
+    private static final int OVERDUE_FEE_PER_DAY = 10;
 
     public LoanService(BookRepository bookRepo, MemberRepository memberRepo, LoanRepository loanRepo) {
         this.bookRepo = bookRepo;
@@ -27,51 +32,94 @@ public class LoanService {
         this.loanRepo = loanRepo;
     }
 
-    public Loan issueBook(String isbn, String memberId) {
-        Book book = bookRepo.findByIsbn(isbn);
-        Member member = memberRepo.findById(memberId);
+    // Issue a book to a member if available and member is active
+    public Loan issueBook(String memberId, String isbn, LocalDate issueDate) {
+        Member member = memberRepo.findById(memberId)
+                .orElseThrow(()->new IllegalArgumentException("Member not found "+memberId));
 
-        if (book == null || !book.isAvailable()) {
-            throw new IllegalArgumentException("Book not available.");
+        if(member.getStatus()!=MemberStatus.ACTIVE){
+            throw new IllegalArgumentException("Member is not Active "+memberId);
         }
-        if (member == null || member.getStatus() == MemberStatus.INACTIVE) {
-            throw new IllegalArgumentException("Member not valid/active.");
+        Book book = bookRepo.findByIsbn(isbn)
+                .orElseThrow(()->new IllegalArgumentException("Book not found "+isbn));
+        if(!book.isAvailable()){
+            throw new IllegalArgumentException("Book is not available "+isbn);
+        }
+
+        // Check if book is already issued and not returned
+        boolean alreadyIssued = loanRepo.findActiveLoanByIsbn(isbn).isPresent();
+        if (alreadyIssued) {
+            throw new IllegalArgumentException("Book is already issued: " + isbn);
         }
 
         book.setAvailable(false);
-        Loan loan = new Loan(isbn, memberId, LocalDate.now(), LocalDate.now().plusDays(14));
+
+        Loan loan = new Loan(member, book, issueDate, issueDate.plusDays(LOAN_PERIOD_DAYS));
         loanRepo.save(loan);
         return loan;
     }
 
-    public void returnBook(String isbn) {
-        Optional<Loan> activeLoan = loanRepo.findActiveLoanByIsbn(isbn);
-        if (activeLoan.isPresent()) {
-            Loan loan = activeLoan.get();
-            loan.setReturnDate(LocalDate.now());
+    // Return a book
+    public Loan returnBook(String memberId, String isbn, LocalDate returnDate) {
+        Optional<Loan> activeLoanOpt = loanRepo.findAll().stream()
+                .filter(l -> l.getBook().getIsbn().equals(isbn)
+                        && l.getMember().getId().equals(memberId)
+                        && l.getReturnDate() == null)
+                .findFirst();
 
-            Book book = bookRepo.findByIsbn(isbn);
-            if (book != null) {
-                book.setAvailable(true);
-            }
-        } else {
-            throw new IllegalArgumentException("No active loan found for ISBN: " + isbn);
+        if (activeLoanOpt.isEmpty()) {
+            throw new IllegalArgumentException("No active loan found for member " + memberId + " and book " + isbn);
         }
+
+        Loan loan = activeLoanOpt.get();
+        loan.setReturnDate(returnDate);
+
+        // mark the book as available again
+        Book book = loan.getBook();
+        book.setAvailable(true);
+
+        // update the loan record
+        loanRepo.update(loan); // Make sure loan is updated in repo
+        return loan;
     }
 
+    // Calculate overdue days (0 if returned on time or not returned yet)
     public long calculateOverdueDays(Loan loan) {
-        if (loan.getReturnDate() == null) {
-            return 0;
-        }
-        long daysLate = ChronoUnit.DAYS.between(loan.getDueDate(), loan.getReturnDate());
-        return Math.max(daysLate, 0);
+        LocalDate dueDate = loan.getDueDate();
+        LocalDate effectiveReturn = loan.getReturnDate() != null ? loan.getReturnDate() : LocalDate.now();
+        long overdueDays = ChronoUnit.DAYS.between(dueDate, effectiveReturn);
+        return Math.max(overdueDays, 0);
     }
 
+    // Calculate fine in Rs
     public long calculateFine(Loan loan) {
-        return calculateOverdueDays(loan) * 10; // ₹10 per day
+        return calculateOverdueDays(loan) * OVERDUE_FEE_PER_DAY;
     }
 
-    public List<Loan> listLoans() {
+    // List all loans
+    public List<Loan> listAllLoans() {
         return loanRepo.findAll();
     }
+
+    // List loans by member
+    public List<Loan> listLoansByMember(String memberId) {
+        return loanRepo.findAll().stream()
+                .filter(l -> l.getMember().getId().equals(memberId))
+                .collect(Collectors.toList());
+    }
+
+    // List loans by book
+    public List<Loan> listLoansByBook(String isbn) {
+        return loanRepo.findAll().stream()
+                .filter(l -> l.getBook().getIsbn().equals(isbn))
+                .collect(Collectors.toList());
+    }
+
+    // List overdue loans
+    public List<Loan> listOverdueLoans() {
+        return loanRepo.findAll().stream()
+                .filter(l -> calculateOverdueDays(l) > 0)
+                .collect(Collectors.toList());
+    }
 }
+
