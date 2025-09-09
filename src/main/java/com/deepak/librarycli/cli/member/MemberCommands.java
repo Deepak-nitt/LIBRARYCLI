@@ -11,7 +11,9 @@ import picocli.CommandLine;
                 ListMemberCommand.class,
                 FindMemberCommand.class,
                 UpdateMemberCommand.class,
-                DeleteMemberCommand.class
+                DeleteMemberCommand.class,
+                DeactivateMemberCommand.class,
+                ActivateMemberCommand.class
         }
 )
 public class MemberCommands implements Runnable {

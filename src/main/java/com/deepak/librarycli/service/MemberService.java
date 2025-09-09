@@ -22,15 +22,28 @@ public class MemberService {
 
     // Register a Member
     public Member registerMember(String name, String emailValue) {
-        if(name == null || emailValue==null){
-            throw new IllegalArgumentException("Name or Email cannot be null");
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Name cannot be null or empty");
         }
+        if (emailValue == null || emailValue.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+
+        // Check if email already exists (case-insensitive comparison)
+        boolean emailExists = memberRepo.findAll().stream()
+                .anyMatch(m -> m.getEmail().getValue().equalsIgnoreCase(emailValue));
+
+        if (emailExists) {
+            throw new IllegalArgumentException("A member with this email already exists: " + emailValue);
+        }
+
         String id = String.format("M%04d", memberCounter++);
-        Member member = new Member(id, name, new Email(emailValue));
+        Member member = new Member(id, name.trim(), new Email(emailValue.trim()));
         member.setStatus(MemberStatus.ACTIVE);
         memberRepo.save(member);
         return member;
     }
+
 
     // update the member info
     public boolean updateMember(String id, String name, String email) {

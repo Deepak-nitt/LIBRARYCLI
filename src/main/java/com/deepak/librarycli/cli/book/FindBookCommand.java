@@ -1,6 +1,7 @@
 package com.deepak.librarycli.cli.book;
 
 import com.deepak.librarycli.model.Book;
+import com.deepak.librarycli.model.Genre;
 import com.deepak.librarycli.service.BookService;
 import picocli.CommandLine;
 
@@ -17,6 +18,9 @@ public class FindBookCommand implements Runnable {
 
     @CommandLine.Option(names = "--author" , description = "Search by author")
     private  String author;
+
+    @CommandLine.Option(names = "--genre" , description = "Search by genre")
+    private Genre genre;
 
     @CommandLine.Option(names = "--isbn", description = "Search by ISBN")
     private String isbn;
@@ -35,6 +39,9 @@ public class FindBookCommand implements Runnable {
                 result = parent.getBookService().searchByIsbn(isbn)
                         .map(List::of)
                         .orElse(List.of());
+            } else if (genre!=null) {
+                result = parent.getBookService().searchByGenre(genre);
+
             } else {
                 System.out.println("Provide --title, --author, or --isbn to search.");
                 return;

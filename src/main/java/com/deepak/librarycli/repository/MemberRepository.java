@@ -34,8 +34,7 @@ public class MemberRepository {
 
     // delete a member
     public boolean delete(String id){
-        members.remove(id);
-        return false;
+       return members.remove(id)!=null;
     }
 
     // check if member exist  by ID

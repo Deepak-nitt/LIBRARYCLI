@@ -41,9 +41,9 @@ public class LoanService {
             throw new IllegalArgumentException("Member is not Active "+memberId);
         }
         Book book = bookRepo.findByIsbn(isbn)
-                .orElseThrow(()->new IllegalArgumentException("Book not found"+isbn));
+                .orElseThrow(()->new IllegalArgumentException("Book not found "+isbn));
         if(!book.isAvailable()){
-            throw new IllegalArgumentException("Book is not available"+isbn);
+            throw new IllegalArgumentException("Book is not available "+isbn);
         }
 
         // Check if book is already issued and not returned
@@ -74,9 +74,11 @@ public class LoanService {
         Loan loan = activeLoanOpt.get();
         loan.setReturnDate(returnDate);
 
+        // mark the book as available again
         Book book = loan.getBook();
         book.setAvailable(true);
 
+        // update the loan record
         loanRepo.update(loan); // Make sure loan is updated in repo
         return loan;
     }
@@ -95,7 +97,7 @@ public class LoanService {
     }
 
     // List all loans
-    public List<Loan> listLoans() {
+    public List<Loan> listAllLoans() {
         return loanRepo.findAll();
     }
 

@@ -15,7 +15,7 @@ public class ReturnLoanCommand implements Runnable {
     @CommandLine.Option(names = "--isbn", required = true, description = "ISBN of the book to return")
     private String isbn;
 
-    @CommandLine.Option(names = "--member", required = true, description = "ID of the member returning the book")
+    @CommandLine.Option(names = "--member", description = "ID of the member returning the book")
     private String memberId;
 
     @CommandLine.Option(names = "--date", description = "Return date in format YYYY-MM-DD. Defaults to today.")
