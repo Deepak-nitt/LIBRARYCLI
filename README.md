@@ -4,7 +4,14 @@ A command-line application to manage **Books**, **Members**, and **Loans** in a 
 
 This application supports full in-memory management of books, members, and loan records, including validation, sorting, searching, issuing, returning, overdue calculations, and fine computation.
 
----
+
+
+## Prerequisites
+
+- Java 17+
+- Maven
+- Git (optional)
+
 
 ## Features
 
@@ -19,13 +26,11 @@ This application supports full in-memory management of books, members, and loan 
 - Activate or deactivate members
 - Search members by **ID**, **name**, or **email**
 - List members filtered by **active/inactive** status
-- Email validation using `Email` record
 
 ### Loans
 - Issue books to active members
 - Return books
 - Calculate overdue days and fines (Rs. 10/day)
-- List loans by **book**, **member**, or all overdue loans
 
 ---
 
@@ -73,16 +78,6 @@ library-cli/
 └── LoanRepository.java
 ```
 
-
----
-
-## Prerequisites
-
-- Java 17+
-- Maven
-- Git (optional)
-
----
 
 ## Build & Run
 
