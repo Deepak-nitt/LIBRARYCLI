@@ -126,29 +126,90 @@ mvn exec:java -Dexec.mainClass="com.deepak.librarycli.Main"
 
 ## Examples
 ```bash
+# -------------------------
+# Book Commands
+# -------------------------
+
 # Add a book
 book add --isbn 1234 --title "Java Basics" --author "John Doe" --genre FICTION --year 2023
 
-# Add a member
-member add --name "Alice" --email "alice@example.com"
+# Add another book
+book add --isbn 5678 --title "Advanced Java" --author "Jane Smith" --genre FANTASY --year 2024
 
-# Issue a book
-loan issue --isbn 1234 --member M0001 --date 2025-09-09
-
-# Return a book
-loan return --isbn 1234 --member M0001 --date 2025-09-20
+# List all books
+book list
 
 # List all books sorted by title
 book list --sort title
 
-# Search a book by title
-book find --title "Java"
+# List all books sorted by year
+book list --sort year
+
+# Find a book by title
+book find --title "Java Basics"
+
+# Find a book by author
+book find --author "John Doe"
+
+# Find a book by ISBN
+book find --isbn 1234
+
+# Find a book by genre
+book find --genre FICTION
+
+# Update a book
+book update --isbn 1234 --title "Java Basics Updated" --author "John Doe" --year 2025
+book update --isbn 1234 --genre MYSTERY
+
+# Delete a book
+book delete --isbn 1234
+
+# -------------------------
+# Member Commands
+# -------------------------
+
+# Add/Register a member
+member add --name "Alice" --email "alice@example.com"
+
+# Add another member
+member add --name "Bob" --email "bob@example.com"
+
+# List all members
+member list
+
+# List active members
+member list --status ACTIVE
+
+# List inactive members
+member list --status INACTIVE
+
+# Find a member by ID
+member find --id M0001
+
+# Find a member by name
+member find --name "Alice"
+
+# Find a member by email
+member find --email "alice@example.com"
+
+# Update a member
+member update --id M0001 --name "Alice Updated" --email "alice.new@example.com"
+
+# Delete a member
+member delete --id M0001
 
 # Activate a member
-member activate --id M0001
+member activate --id M0002
 
 # Deactivate a member
-member deactivate --id M0001
+member deactivate --id M0002
 
-```
+# -------------------------
+# Loan Commands
+# -------------------------
 
+# Issue a book to a member
+loan issue --isbn 5678 --member M0002 --date 2025-09-10
+
+# Return a book
+loan return --isbn 5678 --member M0002 --date 2025-10-26
