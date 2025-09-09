@@ -15,9 +15,13 @@ public class Member {
 
 
     }
+    // Getter and Setters
     // getter for the id
     public String getId(){
         return id;
+    }
+    public void setId(String id){
+        this.id =id;
     }
     // getter for the name;
 
@@ -25,9 +29,17 @@ public class Member {
         return name;
     }
 
+    public void setName(String name){
+        this.name=name;
+    }
+
     // returning the email
     public  Email getEmail(){
         return email;
+    }
+
+    public void setEmail(Email email){
+        this.email = email;
     }
 
     // Returning the status
@@ -42,10 +54,7 @@ public class Member {
 
     @Override
     public String toString() {
-        return String.format("[%s] %s (%s) - %s", id, name, email.value(), status);
-    }
-
-
-    public void put(Email email, Member member) {
+        return String.format("Member[ID=%s, Name=%s, Email=%s, Status=%s]",
+                id, name, email.getValue(), status);
     }
 }

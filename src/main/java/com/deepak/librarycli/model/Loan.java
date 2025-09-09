@@ -3,60 +3,43 @@ package com.deepak.librarycli.model;
 import java.time.LocalDate;
 
 public class Loan {
-
-    private String isbn;
-    private String memberId;
+    private String id;
+    private Member member;
+    private Book book;
     private LocalDate issueDate;
     private LocalDate dueDate;
     private LocalDate returnDate;
 
-    // Constructor to create a new loan
-    public Loan(String isbn , String memberId , LocalDate issueDate , LocalDate dueDate){
-        this.isbn =isbn;
-        this.memberId =memberId;
-        this.issueDate =issueDate;
+    public Loan(Member member, Book book, LocalDate issueDate, LocalDate dueDate) {
+        this.member = member;
+        this.book = book;
+        this.issueDate = issueDate;
         this.dueDate = dueDate;
-
     }
 
-    // getter for the getIsbn;
-    public String getIsbn(){
-        return isbn;
+    // Getters & Setters
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    }
+    public Member getMember() { return member; }
+    public void setMember(Member member) { this.member = member; }
 
-    // return the id of the member
-    public String getMemberId(){
-        return memberId;
-    }
+    public Book getBook() { return book; }
+    public void setBook(Book book) { this.book = book; }
 
-    // return the date when the book is issued
-    public LocalDate getIssueDate(){
-        return issueDate;
-    }
+    public LocalDate getIssueDate() { return issueDate; }
+    public void setIssueDate(LocalDate issueDate) { this.issueDate = issueDate; }
 
-    // return the due date of returning the book
-    public LocalDate getDueDate(){
-        return dueDate;
-    }
+    public LocalDate getDueDate() { return dueDate; }
+    public void setDueDate(LocalDate dueDate) { this.dueDate = dueDate; }
 
-    // return the date when book was actually returned
-    public  LocalDate getReturnDate(){
-        return returnDate;
-    }
+    public LocalDate getReturnDate() { return returnDate; }
+    public void setReturnDate(LocalDate returnDate) { this.returnDate = returnDate; }
 
-    // Setters for setting the return date when the book was actually returned
-    public void setReturnDate(LocalDate returnDate){
-        this.returnDate = returnDate;
-    }
-
-
-
-    // string representation of the loan details.
     @Override
     public String toString() {
-        return String.format("Loan: Book %s -> Member %s (Issued: %s, Due: %s, Returned: %s)",
-                isbn, memberId, issueDate, dueDate,
-                returnDate != null ? returnDate : "Not Returned");
+        return String.format("Loan[ID=%s, Member=%s, Book=%s, Issue=%s, Due=%s, Return=%s]",
+                id, member.getName(), book.getTitle(), issueDate, dueDate,
+                returnDate != null ? returnDate : "Not returned");
     }
 }

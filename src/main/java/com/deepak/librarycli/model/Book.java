@@ -23,13 +23,17 @@ public class Book {
         this.author = author;
         this.genre = genre;
         this.year = year;
-        this.available = true;
+        this.available = true; // available by default
     }
 
-    // Getters
+    // Getters and setters
     // Getter for isbn
     public String getIsbn(){
         return isbn;
+
+    }
+    public void setIsbn(String isbn){
+        this.isbn =isbn;
 
     }
 
@@ -39,9 +43,17 @@ public class Book {
 
     }
 
+    public void setTitle(String title){
+        this.title = title;
+    }
+
     // Getter for the author
      public String getAuthor(){
         return author;
+     }
+
+     public void setAuthor( String author){
+        this.author=author;
      }
 
      // Getter for the genre
@@ -49,9 +61,15 @@ public class Book {
         return genre;
     }
 
+    public void setGenre(Genre genre){
+        this.genre = genre;
+    }
      // Getter for the  year
     public  int getYear(){
         return year;
+    }
+    public void setYear(int year){
+        this.year = year;
     }
 
     public  boolean isAvailable(){
@@ -64,10 +82,8 @@ public class Book {
     }
 
     @Override
-    public String toString(){
-        return String.format("[%s] %s by %s (%d) -%s",isbn,title,author,year,available ? "Available":"Not Available");
-    }
-
-    public void put(String isbn, Book book) {
+    public String toString() {
+        return String.format("Book[ISBN=%s, Title=%s, Author=%s, Genre=%s, Year=%d, Available=%b]",
+                isbn, title, author, genre, year, available);
     }
 }
